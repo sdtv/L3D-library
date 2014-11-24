@@ -7,8 +7,9 @@ void setup()
 {
   size(displayWidth, displayHeight, P3D);
   cube=new L3D(this);
-  cube.enableDrawing();  //draw the virrtual cube
+  cube.enableDrawing();  //draw the virtual cube
   cube.enableMulticastStreaming();  //stream the data over UDP to any L3D cubes that are listening on the local network
+  cube.enablePoseCube();
 }
 
 void draw()
@@ -17,8 +18,5 @@ void draw()
   cube.background(0);
   if ((frameCount%20)>10)    //turn the LED on for ten frames, then off for ten frames
     cube.setVoxel(voxel, color(255, 0, 0));
-  translate(width/2, height/2);  //move to the center of the display
-  rotateX(PI/8);  //notate to a nice angle for vieweing the cube
-  rotateY(-PI/8);
 }
 

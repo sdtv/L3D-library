@@ -13,6 +13,7 @@ void setup()
   cube=new L3D(this);
   cube.enableDrawing();  //draw the virtual cube
   cube.enableMulticastStreaming();  //stream the data over UDP to any L3D cubes that are listening on the local network
+  cube.enablePoseCube();
   newSphere();
 }
 
@@ -25,10 +26,6 @@ void draw()
   radius+=speed;
   if(radius>popRadius)
     newSphere();
-
-  translate(width/2, height/2);  //move to the center of the display
-  rotateX(PI/8);  //rotate to a nice angle for vieweing the cube
-  rotateY(-PI/8);
 }
 
 void newSphere()

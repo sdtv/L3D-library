@@ -10,6 +10,7 @@ void setup()
   cube=new L3D(this);
   cube.enableDrawing();
   cube.enableMulticastStreaming();
+  cube.enablePoseCube();
 }
 
 void draw()
@@ -52,11 +53,8 @@ void draw()
     break;
   }
   drawCube(topLeft, side, cubeCol);
-  translate(width/2, height/2);
-  rotateX(PI/8);
-  rotateY(PI/8);
-//  if (frameCount%5==0)
-//    cubeInc();
+  if (frameCount%5==0)
+    cubeInc();
 }
 
 void drawCube(PVector topLeft, int side, color col)

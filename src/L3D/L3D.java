@@ -28,6 +28,7 @@ package L3D;
 
 import processing.core.PApplet;
 import processing.core.PVector;
+import processing.event.MouseEvent;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -58,6 +59,9 @@ public class L3D {
 	private static boolean drawCube;
 	public static int side = 8;
 	public static int scale = 20;
+	public static double xAngle=-0.15;
+	public static double yAngle=0.39;
+	public boolean pose=false;
 	public static int[][][] cube;
 	public static PVector center;
 	public static boolean manualUpdate = true;
@@ -73,6 +77,7 @@ public class L3D {
 		super();
 		parent = _parent;
 		parent.registerMethod("draw", this);
+		parent.registerMethod("mouseEvent", this);
 		welcome();
 		drawCube = false;
 		cube = new int[side][side][side];
@@ -85,6 +90,7 @@ public class L3D {
 		side=_side;
 		parent = _parent;
 		parent.registerMethod("draw", this);
+		parent.registerMethod("mouseEvent", this);
 		welcome();
 		drawCube = false;
 		cube = new int[side][side][side];
@@ -108,6 +114,7 @@ public class L3D {
 		parent = _parent;
 		welcome();
 		parent.registerMethod("draw", this);
+		parent.registerMethod("mouseEvent", this);
 		spark = new Spark(accessToken);
 		drawCube = false;
 		cube = new int[side][side][side];
@@ -132,6 +139,7 @@ public class L3D {
 		side=_side;
 		welcome();
 		parent.registerMethod("draw", this);
+		parent.registerMethod("mouseEvent", this);
 		spark = new Spark(accessToken);
 		drawCube = false;
 		cube = new int[side][side][side];
@@ -156,6 +164,7 @@ public class L3D {
 		side=_side;
 		welcome();
 		parent.registerMethod("draw", this);
+		parent.registerMethod("mouseEvent", this);
 		spark = new Spark(accessToken);
 		spark.name=name;
 		
@@ -203,6 +212,8 @@ public class L3D {
 
 	// if we're drawing the cube
 	public void draw() {
+		if(pose)  //translate the cube to the center and rotate it according to the mouse
+			poseCube();
 		if (drawCube) {
 			parent.stroke(255, 10);
 			for (float x = 0; x < side; x++)
@@ -572,7 +583,43 @@ public class L3D {
 	public static int getVoxel(int x, int y, int z) {
 		return cube[x][y][z];
 	}
+	
+	public void enablePoseCube()
+	{
+		pose=true;
+	}
+	
+	public void poseCube()
+	{
+		parent.translate(parent.width/2, parent.height/2);
+		parent.rotateY((float)xAngle);
+		parent.rotateX((float)-yAngle);
+	}
+	
+	  // This method is called automatically every loop
+	  // becasue we have registerMouseEvent(this object)
+	  public void mouseEvent(MouseEvent event){
 
+		  switch (event.getAction()) {
+		    case MouseEvent.PRESS:
+		      // do something for the mouse being pressed
+		      break;
+		    case MouseEvent.RELEASE:
+		      // do something for mouse released
+		      break;
+		    case MouseEvent.CLICK:
+		      // do something for mouse clicked
+		      break;
+		    case MouseEvent.DRAG:
+		    	xAngle+=(float)(parent.mouseX-parent.pmouseX)/100;
+		    	yAngle+=(float)(parent.mouseY-parent.pmouseY)/100;
+				
+		      // do something for mouse dragged
+		      break;
+		  }
+	  }
+	    
+	  
 	public static int colorMap(float val, float min, float max) {
 		float range = 1024;
 		val = parent.map(val, min, max, 0, range);
