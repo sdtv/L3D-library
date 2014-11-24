@@ -1,7 +1,7 @@
 
 color selectedColor;
 Button[] swatches;
-squareButton currentSwatch, clearButton, saveButton, upButton, downButton;
+squareButton currentSwatch, clearButton, saveButton, openButton, upButton, downButton;
 PVector UIOrigin;
 color currentColor;
 int blinkRate=1000;
@@ -15,11 +15,12 @@ void initUI()
     swatches[i]=new Button(UIOrigin.x+i*cube.side*boxSide/swatches.length, UIOrigin.y+(cube.side+2)*boxSide, 35, cube.colorMap(i, 0, swatches.length));
   swatches[0].selected=true;
   selectedColor=swatches[0].getColor();  
-  currentSwatch=new squareButton(UIOrigin.x+cube.side*boxSide/2, UIOrigin.y+(cube.side+3)*boxSide, swatches[0].getColor());
+  currentSwatch=new squareButton(UIOrigin.x+cube.side*boxSide/4, UIOrigin.y+(cube.side+3)*boxSide, swatches[0].getColor());
   currentSwatch.x-=currentSwatch.side/2;
   currentSwatch.setColor(selectedColor);
   saveButton=new squareButton(UIOrigin.x+(cube.side+3)*boxSide/2, UIOrigin.y+(cube.side+3)*boxSide, "save.png");
-  clearButton=new squareButton(UIOrigin.x+(cube.side+6)*boxSide/2, UIOrigin.y+(cube.side+3)*boxSide, "clear.png");
+  openButton=new squareButton(UIOrigin.x+(cube.side+6)*boxSide/2, UIOrigin.y+(cube.side+3)*boxSide, "open.png");
+  clearButton=new squareButton(UIOrigin.x+(cube.side+9)*boxSide/2, UIOrigin.y+(cube.side+3)*boxSide, "clear.png");
   upButton=new squareButton(UIOrigin.x-300, UIOrigin.y+4*boxSide, "up.png");
   downButton=new squareButton(UIOrigin.x-300, UIOrigin.y+(7)*boxSide, "down.png");
   //  saveButton=new squareButton(UIOrigin.x+(cube.side+3)*boxSide/2, UIOrigin.y+(cube.side+3)*boxSide, color(0,80,180),"save");
@@ -32,14 +33,14 @@ void drawUI()
   textSize(12);
   String []info= {
     "Make your own 3D paintings layer by layer,", 
-    "Select any color from the pallette, and then click in a square to color that voxel",
-      "Change layers by clicking the up and down arrows", 
+    "Select any color from the pallette, and then click in a square to color that voxel", 
+    "Change layers by clicking the up and down arrows", 
     "Click again on a color to pull a Winehouse and toggle it back to black.", 
     "You can also just use your keyboard:  the arrow keys move your selected key inside your layer,", 
     "     and the 'q' and 'a' keys to move up or down layers", 
-    "Select a color from the swatches, and hit the space key to toggle that color in your selected point",
-    "Click the disk icon to save your drawing as a .L3D file into the program's directory, or press the 's' key",
-    "Click the sweep icon to clear your drawing, or press 'c'",
+    "Select a color from the swatches, and hit the space key to toggle that color in your selected point", 
+    "Click the disk icon to save your drawing as a .L3D file into the program's directory, or press the 's' key", 
+    "Click the sweep icon to clear your drawing, or press 'c'", 
     "Finally, you can drag and drop any .L3D file over the program, and it will load the image into the editor",
   };  
   HUDText(info, new PVector(0, 100, 0));
@@ -50,22 +51,12 @@ void drawUI()
   for (int i=0; i<swatches.length; i++)
     swatches[i].draw();
   currentSwatch.draw();
+  openButton.draw();
   saveButton.draw();
   clearButton.draw();
   upButton.draw();
   downButton.draw();
 
-  /*
-  if((frameCount%blinkRate)>blinkRate/2)
-   cube.setVoxel(selected,currentColor);
-   else
-   cube.setVoxel(selected,color(0));
-   if(frameCount%(blinkRate/2)==0)
-   {
-   println(currentColor);
-   cube.update();
-   }
-   */
 }
 
 void HUDText(String[] info, PVector origin)
@@ -188,6 +179,9 @@ void mouseClicked()
   if (saveButton.isClicked())
     cube.saveFile();
 
+  if (openButton.isClicked())
+    selectInput("Select a .L3D file to open", "openFile", new File(dataPath("")));
+
   if (clearButton.isClicked())
     cubeBackground(0);
 
@@ -262,14 +256,14 @@ void keyPressed()
       currentColor=selectedColor;
     }
   }
-  
+
   //clear the cube
   if (Character.toLowerCase(key)=='c')
   {
     cubeBackground(color(0));  //set all the buffer's voxels to black
-    cube.background(color(0));   //set the cube object's voxels to black    
+    cube.background(color(0));   //set the cube object's voxels to black
   }
-  
+
   //save the current design to an '.L3D' file, autonamed based on the current time
   if (Character.toLowerCase(key)=='s')
     cube.saveFile();
@@ -278,19 +272,15 @@ void keyPressed()
 }
 
 
-//if a file is dropped onto the program window
 //TODO -- error-check the file, just so we're not loading non-.L3D files,
 //and give some feedback if it doesn't load correctly.
-void dropEvent(DropEvent theDropEvent) {
-  println("dropped");
-  if (theDropEvent.isFile()) {
-    File file = theDropEvent.file();
-    cube.loadFile(file);
+
+void openFile(File file) {
+  cube.loadFile(file);
   for (int x=0; x<cube.side; x++)
     for (int y=0; y<cube.side; y++)
       for (int z=0; z<cube.side; z++)
-        setVoxel(new PVector(x,y,z), cube.getVoxel(x,y,z));
-  }
+        setVoxel(new PVector(x, y, z), cube.getVoxel(x, y, z));
 }
 
 void mouseDragged()
@@ -298,3 +288,4 @@ void mouseDragged()
   rotX+=(float)(mouseY-pmouseY)/mouseScale;
   rotY+=(float)(mouseX-pmouseX)/mouseScale;
 }
+

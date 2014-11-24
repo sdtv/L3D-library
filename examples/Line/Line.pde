@@ -3,31 +3,41 @@ import L3D.*;
 PeasyCam cam;
 
 L3D cube;
-float offset, radius=3.5, lineAngle;
+float radius=3.5, lineAngle;
 PVector center;
+
 void setup()
-{  
+{
   size(displayWidth, displayHeight, P3D);
   cube=new L3D(this);
-  cube.enableDrawing();
-  cam = new PeasyCam(this, 500);
-  cam.setMinimumDistance(100);
-  cam.setMaximumDistance(5000);
+  cube.enableDrawing();  //draw the virrtual cube
+  cube.enableMulticastStreaming();  //stream the data over UDP to any L3D cubes that are listening on the local network
 }
 
 void draw()
 {
   background(0);
-  rotateX((float) Math.PI);
-  translate(-cube.side * cube.scale / 2, -cube.side * cube.scale / 2, -cube.side * cube.scale / 2);
   cube.background(0);
-  
-  //for(float theta=0;theta<2*PI;theta+=2*PI/3)
-  //  cube.line(new PVector(3.5+radius*cos(theta+offset), 0, 3.5+radius*sin(theta+offset)), new PVector(3.5+radius*cos(theta+PI+offset), cube.side-1, 3.5+radius*sin(theta+PI+offset)), cube.colorMap((theta+offset)%(2*PI), 0, 2*PI));
-  for(float theta=0;theta<2*PI;theta+=PI/3)
-    cube.line(new PVector(cube.center.x+radius*cos(theta+offset), 0, cube.center.z+radius*sin(theta+offset)), new PVector(cube.center.x+radius*cos(theta+offset+lineAngle), cube.side-1, cube.center.z+radius*sin(theta+offset+lineAngle)), cube.colorMap((theta+offset)%(2*PI), 0, 2*PI));
- // offset+=0.01;
+
+  for (float theta=0; theta<2*PI; theta+=PI/3)
+  {
+    PVector start=new PVector(cube.center.x+radius*cos(theta), 0, cube.center.z+radius*sin(theta));
+    PVector end=new PVector(cube.center.x+radius*cos(theta+lineAngle), cube.side-1, cube.center.z+radius*sin(theta+lineAngle));
+    color col=cube.colorMap(theta%(2*PI), 0, 2*PI);
+    cube.line(start, end, col);
+  }
   lineAngle+=.05;
+
+  //the cube library draws the cube at the end of the draw() function.  
+  //PoseCube() translates and rotates the graphics context to the right angle to display the cube.
+  //The displayed cube will be centered about the graphics context's (0,0,0) point
+  poseCube();
 }
 
+void poseCube()
+{
+  translate(width/2, height/2);  //move to the center of the display
+  rotateX(PI/8);  //notate to a nice angle for vieweing the cube
+  rotateY(-PI/8);
+}
 

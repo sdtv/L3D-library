@@ -1,7 +1,4 @@
 import L3D.*;
-import sojamo.drop.*;
-
-SDrop drop;
 
 PVector selected;
 int boxSide=50;
@@ -24,7 +21,6 @@ void setup()
   selected=new PVector(0, 0);
   logo=loadImage("logo.png");
   front=loadImage( "front-rotated.png");
-  drop = new SDrop(this);
   println("cube library loaded");
 
   /*
@@ -64,7 +60,7 @@ void draw()
   fill(arrowCol);
   stroke(arrowCol);
   textSize(48);
-  translate(-15, 48, -cube.scale/2);//cube.side*cube.scale/2);
+  translate(-15, 48, -cube.scale/2);
   arrow(new PVector(textWidth("FRONT")/2, 20), new PVector(textWidth("FRONT")/2, 80), 0, cube.scale/2, true);
   text("FRONT", 0, 0);
   popMatrix();

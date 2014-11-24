@@ -1,12 +1,10 @@
 package L3D;
 
 //import UDP library
-import hypermedia.net.*;
-import java.awt.Color;
 
 public class Streaming {
 
-	private static UDP udp;  // define the UDP object
+	private static L3D_UDP udp;  // define the UDP object
 	boolean multicast;
 	public static String address;
 	private static int port=2222;
@@ -17,7 +15,7 @@ public class Streaming {
 	  multicast=true;
 	  address       = "224.0.0.1";  // this is the multicast IP -- the router reserves this address,
 	  								//and forwards any packets it receives at this address to all hosts on the LAN
-	  udp = new UDP( this, port, address );
+	  udp = new L3D_UDP( this, port, address );
 	}	
 	
 	public Streaming(int _port)
@@ -26,7 +24,7 @@ public class Streaming {
 	  port=_port;
 	  address       = "224.0.0.1";  // this is the multicast IP -- the router reserves this address,
 	  								//and forwards any packets it receives at this address to all hosts on the LAN
-	  udp = new UDP( this, port, address );
+	  udp = new L3D_UDP( this, port, address );
 	}
 	
 	//direct streaming constructor
@@ -35,7 +33,7 @@ public class Streaming {
 	  multicast=false;
 	  address=ip;
 	  System.out.println("IP address is: "+address);
-	  udp = new UDP( this );
+	  udp = new L3D_UDP( this );
 	}
 	
 	//direct streaming constructor
@@ -44,7 +42,7 @@ public class Streaming {
 	  multicast=false;
 	  address=ip;
 	  port=_port;
-	  udp = new UDP( this );
+	  udp = new L3D_UDP( this );
 	}
 	
 	void sendData(int[][][] cube)
