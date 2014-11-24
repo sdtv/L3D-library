@@ -3,7 +3,7 @@
  * A library for simulating, drawing and streaming data to an L3D cube
  * http://l3dcube.com
  *
- * Copyright (c) 2013 Alex Hornstein http://www.artiswrong.com
+ * Copyright (c) 2014 Alex Hornstein http://www.artiswrong.com
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -22,7 +22,7 @@
  * 
  * @author      Alex Hornstein http://www.artiswrong.com
  * @modified    11/24/2014
- * @version     1.0.0 (1)
+ * @version     2.0.0 (2)
  */
 package L3D;
 
@@ -55,7 +55,7 @@ public class L3D {
 	private static PApplet parent;
 	public static Streaming stream;
 	public static Spark spark;
-	public final static String VERSION = "1.0.0";
+	public final static String VERSION = "2.0.0";
 	private static boolean drawCube;
 	public static int side = 8;
 	public static int scale = 20;
@@ -651,7 +651,7 @@ public class L3D {
 
 	private void welcome() {
 		System.out
-				.println("L3D cube library 1.0.0 by Alex Hornstein http://www.artiswrong.com");
+				.println("L3D cube library 2.0.0 by Alex Hornstein http://www.artiswrong.com");
 	}
 
 	/**
